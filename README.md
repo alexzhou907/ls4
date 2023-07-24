@@ -1,11 +1,18 @@
 # Deep Latent State Space Models for Time-Series Generation
 
-[![Python Version](https://img.shields.io/badge/Python-3.8-blue.svg)](https://github.com/alexzhou907/ls4)
-[<img src="https://img.shields.io/badge/Framework-PyTorch-red.svg"/>](https://pytorch.org/)
-[![GitHub license](https://img.shields.io/github/license/alexzhou907/ls4)](https://github.com/alexzhou907/ls4/blob/main/LICENSE)
+
+<div align="center">
+  
+  [![Python Version](https://img.shields.io/badge/Python-3.8-blue.svg)](https://github.com/alexzhou907/ls4)
+  [<img src="https://img.shields.io/badge/Framework-PyTorch-red.svg"/>](https://pytorch.org/)
+  [![GitHub license](https://img.shields.io/github/license/alexzhou907/ls4)](https://github.com/alexzhou907/ls4/blob/main/LICENSE)
+
+</div>
+
 <p align="center">
   <img src="assets/monash_real.png" width="80%"/>
 </p>
+
 
 Implementation of [Deep Latent State Space Models for Time-Series Generation](https://arxiv.org/abs/2212.12749) 
 
