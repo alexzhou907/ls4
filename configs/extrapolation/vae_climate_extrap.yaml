@@ -1,0 +1,115 @@
+doc: climate_extrap
+data:
+  dataset: climate
+  base: YOUR_PATH/ushcn_daily
+  dir: YOUR_PATH/ushcn_daily/small_chunk_fold_idx_0/
+  csv_file_path: small_chunked_sporadic.csv
+#  csv_file_tags: None
+#  csv_file_cov: None
+  classify: &classify False
+  classify_type: &classify_type per_seq #per_tp
+  T_val: 150
+  max_val_samples: 3
+  sample_tp: null
+  cut_tp: null
+  extrap: True
+  channel: &channel 5
+
+optim:
+  lr: 0.001
+  weight_decay: 0.0
+  epochs: 500
+  batch_size: 64
+  eval_iter: 10
+
+model:
+  sigma: 0.05
+  z_dim: &z_dim 10
+  in_channels: *channel
+  bidirectional: False
+  classifier: *classify
+  classifier_type: *classify_type
+  linear_cls: False
+  decoder:
+    use_spatial: False
+    activation: sigmoid
+    prior:
+      d_input: *z_dim #zdim
+      aux_channels: 0 #input, will be concatenated to z
+      d_state: 64
+      d_output: *z_dim #zdim
+      d_model: 64
+      # d_temb: 64
+      n_layers: 4
+      backbone: autoreg
+      use_unet: False
+      pool: []
+      expand: 2
+      ff: 2
+      bidirectional: False
+      dropout: 0.0
+      s4_type: s4
+      use_latent: True
+      latent_type: split
+      lr: 0.001
+#
+#    decoder:
+#      d_input: *z_dim #zdim
+#      aux_channels: *channel #input, will be concatenated to z
+#      d_state: 64
+#      d_output: *z_dim
+#      d_model: 64
+#      n_layers: 3
+#      pool: [ 4,4 ]
+#      expand: 2
+#      ff: 2
+#      bidirectional: False
+#      dropout: 0.0
+#      s4_type: s4d_joint
+#      use_latent: True
+#      latent_type: none
+#      aux_out: *channel
+#      lr: 0.001
+    decoder:
+      d_input: *z_dim #zdim
+      aux_channels: 0 #input, will be concatenated to z
+      d_state: 64
+      d_output: *channel
+      d_model: 64
+      # d_temb: 64
+      n_layers: 4
+      backbone: autoreg
+      use_unet: False
+      pool: []
+      expand: 2
+      ff: 2
+      bidirectional: False
+      dropout: 0.0
+      s4_type: s4
+      use_latent: False
+      latent_type: none
+      aux_out: 0
+      lr: 0.001
+
+  encoder:
+    use_spatial: False
+    posterior:
+      d_input: *channel
+      aux_channels: 0
+      d_state: 64
+      d_output: *z_dim #zdim
+      d_model: 64
+      # d_temb: 64
+      n_layers: 4
+      backbone: autoreg
+      use_unet: False
+      pool: []
+      expand: 2
+      ff: 2
+      bidirectional: False
+      dropout: 0.0
+      s4_type: s4
+      use_latent: True
+      latent_type: split
+      lr: 0.001
+      

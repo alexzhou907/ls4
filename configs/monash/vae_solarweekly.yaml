@@ -1,0 +1,93 @@
+doc: solar_weekly
+data:
+  dataset: solar_weekly
+  path: YOUR_PATH/solar_weekly
+  extrap: False
+  classify: False
+  channel: &channel 1
+  preproc: normalize_per_seq
+
+
+optim:
+  lr: 0.001
+  weight_decay: 0.0
+  epochs: 100000
+  batch_size: 128
+  eval_iter: 100
+  metric_iter: 500
+  use_ema: True
+  lamb: 0.99
+  start_step: 200 
+
+model:
+  sigma: 0.1
+  z_dim: &z_dim 5
+  in_channels: *channel
+  bidirectional: False
+  classifier: False
+  classifier_type: per_seq
+  linear_cls: False
+  decoder:
+    use_spatial: False
+    activation: identity
+    prior:
+      d_input: *z_dim #zdim
+      aux_channels: 0 #input, will be concatenated to z
+      d_state: 64
+      d_output: *z_dim #zdim
+      d_model: 64
+      n_layers: 4
+      backbone: autoreg
+      use_unet: False
+      pool: [1]
+      expand: 2
+      ff: 2
+      bidirectional: False
+      dropout: 0.0
+      s4_type: s4
+      use_latent: True
+      latent_type: split
+      lr: 0.001
+      
+    decoder:
+      d_input: *z_dim #zdim
+      aux_channels: 0 #input, will be concatenated to z
+      d_state: 64
+      d_output: *channel
+      d_model: 64
+      n_layers: 4
+      backbone: autoreg
+      use_unet: False
+      pool: [1]
+      expand: 2
+      ff: 2
+      bidirectional: False
+      dropout: 0.0
+      s4_type: s4
+      use_latent: False
+      latent_type: none
+      aux_out: 0
+      lr: 0.001
+
+  encoder:
+    use_spatial: False
+    posterior:
+      d_input: *channel
+      aux_channels: 0
+      d_state: 64
+      d_output: *z_dim #zdim
+      d_model: 64
+      n_layers: 4
+      backbone: autoreg
+      use_unet: False
+      pool: [1]
+      expand: 2
+      ff: 2
+      bidirectional: False
+      dropout: 0.0
+      s4_type: s4
+      use_latent: True
+      latent_type: split
+      lr: 0.001
+
+

@@ -1,0 +1,16 @@
+
+torch==1.12.1+cu116
+torchvision==0.13.1+cu116
+tqdm==4.64.0
+pytorch-lightning
+omegaconf==2.2
+einops==0.4
+pykeops==1.5
+cmake
+h5py
+matplotlib
+wandb
+pandas==1.4.3
+scikit-learn
+opt-einsum
+properscoring

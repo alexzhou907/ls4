@@ -1,0 +1,125 @@
+doc: physionet_interp
+data:
+  dataset: physionet
+  path: YOUR_PATH/physionet
+  n: 8000
+  timepoints: 100
+  max_t: 5 #subsample in [0, max_t]
+  quantization: 0.016 # 1 min
+  classify: &classify False
+  classify_type: &classify_type per_seq #per_tp
+  extrap: False
+  sample_tp: null
+  cut_tp: null
+  channel: &channel 41
+
+optim:
+  lr: 0.001
+  weight_decay: 0.0
+  epochs: 500
+  batch_size: 64
+  eval_iter: 10
+
+model:
+  sigma: 0.05
+  z_dim: &z_dim 20
+  in_channels: *channel
+  bidirectional: False
+  classifier: *classify
+  classifier_type: *classify_type
+  linear_cls: False
+  decoder:
+    use_spatial: False
+    activation: identity
+    prior:
+      d_input: *z_dim #zdim
+      aux_channels: 0 #input, will be concatenated to z
+      d_state: 64
+      d_output: *z_dim #zdim
+      d_model: 64
+      # d_temb: 64
+      n_layers: 4
+      backbone: autoreg
+      use_unet: True
+      pool: []
+      expand: 2
+      ff: 2
+      bidirectional: False
+      dropout: 0.0
+      s4_type: s4
+      use_latent: True
+      latent_type: split
+      lr: 0.001
+#
+#    decoder:
+#      d_input: *z_dim #zdim
+#      aux_channels: *channel #input, will be concatenated to z
+#      d_state: 64
+#      d_output: *z_dim
+#      d_model: 64
+#      n_layers: 3
+#      pool: [ 4,4 ]
+#      expand: 2
+#      ff: 2
+#      bidirectional: False
+#      dropout: 0.0
+#      s4_type: s4d_joint
+#      use_latent: True
+#      latent_type: none
+#      aux_out: *channel
+#      lr: 0.001
+    decoder:
+      d_input: *z_dim #zdim
+      aux_channels: 0 #input, will be concatenated to z
+      d_state: 64
+      d_output: *channel
+      d_model: 64
+      # d_temb: 64
+      n_layers: 4
+      backbone: autoreg
+      use_unet: True
+      pool: []
+      expand: 2
+      ff: 2
+      bidirectional: False
+      dropout: 0.0
+      s4_type: s4
+      use_latent: False
+      latent_type: none
+      aux_out: 0
+      lr: 0.001
+
+  encoder:
+    use_spatial: False
+    posterior:
+      d_input: *channel
+      aux_channels: 0
+      d_state: 64
+      d_output: *z_dim #zdim
+      d_model: 64
+      # d_temb: 64
+      n_layers: 4
+      backbone: autoreg
+      use_unet: True
+      pool: []
+      expand: 2
+      ff: 2
+      bidirectional: False
+      dropout: 0.0
+      s4_type: s4
+      use_latent: True
+      latent_type: split
+      lr: 0.001
+
+#    encoder:
+#      in_channels: *channel
+#      out_ch: 16
+#      ch: 64
+#      ch_mult: [ 1, 2, 2, 2]
+#      num_res_blocks: 2
+#      attn_resolutions: [ 16, ]
+#      dropout: 0.1
+#      resolution: *img_size
+#    var_type: fixedlarge
+#    ema_rate: 0.9999
+#    ema: True
